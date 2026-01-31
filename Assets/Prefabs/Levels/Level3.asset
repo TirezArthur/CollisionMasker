@@ -12,9 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750e4c5799aa4c84cbc34cb41744071b, type: 3}
   m_Name: Level3
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  _completed: 0
+  _completed: 1
   _prefab: {fileID: 8476351858752860087, guid: b086b487aa0a9524b9464dc5bc23512f, type: 3}
   _lockedLayers:
     serializedVersion: 2
     m_Bits: 0
-  _toggleConstraints: []
+  _toggleConstraints:
+  - layer1:
+      serializedVersion: 2
+      m_Bits: 16384
+    layer2:
+      serializedVersion: 2
+      m_Bits: 8192

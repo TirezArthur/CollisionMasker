@@ -379,9 +379,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.5
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.76, z: 0}
 --- !u!54 &1061220563671360950
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -390,8 +390,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9196147519182679586}
   serializedVersion: 5
-  m_Mass: 0.2
-  m_LinearDamping: 0
+  m_Mass: 0.6
+  m_LinearDamping: 2.74
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -408,7 +408,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &-6131494642299221728
 BoxCollider:
   m_ObjectHideFlags: 0
