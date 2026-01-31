@@ -118,6 +118,8 @@ MonoBehaviour:
     m_Bits: 0
   m_Background: {fileID: 3176861558847001001}
   m_Checkmark: {fileID: 8109181692985805638}
+  m_EnabledBackground: {fileID: 21300000, guid: 1be8f87dac210cc49bf35f016b2a0dcc, type: 3}
+  m_DisabledBackground: {fileID: 21300000, guid: c855a1eb90faa694ea6713afe9b3063f, type: 3}
 --- !u!1 &8123940287663638800
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,14 +180,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 1be8f87dac210cc49bf35f016b2a0dcc, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -252,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.17735851, g: 0.17367749, b: 0.17367749, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

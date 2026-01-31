@@ -33,8 +33,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: 0}
-  m_SizeDelta: {x: 100, y: 0}
+  m_AnchoredPosition: {x: 75, y: 0}
+  m_SizeDelta: {x: 75, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &8495582645993737100
 MonoBehaviour:
@@ -114,6 +114,9 @@ MonoBehaviour:
   m_GridGroup: {fileID: 9139251897600410759}
   m_TogglePrefab: {fileID: 6139442690105077934, guid: 7cd8a76af0f45c94cbf0f8a71964cb4d, type: 3}
   m_LabelPrefab: {fileID: 3340045499460037473, guid: 661e2ba00fdb7fd4a851a332c330c3b8, type: 3}
+  m_LockedLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &4817316093295047689
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,7 +150,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -100}
+  m_AnchoredPosition: {x: 75, y: -75}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &4854357456260952061
@@ -311,8 +314,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -100}
-  m_SizeDelta: {x: 100, y: 0}
+  m_AnchoredPosition: {x: 0, y: -75}
+  m_SizeDelta: {x: 75, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &831874711644737352
 MonoBehaviour:

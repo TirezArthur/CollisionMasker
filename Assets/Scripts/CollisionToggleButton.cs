@@ -8,24 +8,11 @@ public class CollisionToggleButton : MonoBehaviour
 
     [SerializeField] private Image m_Background;
     [SerializeField] private Image m_Checkmark;
+
+    [SerializeField] private Sprite m_EnabledBackground;
+    [SerializeField] private Sprite m_DisabledBackground;
+
     private bool m_IsToggleUnlocked = true;
-
-    private void Start()
-    {
-        if (!m_IsToggleUnlocked)
-        {
-            // Set background color to gray
-            m_Background.color = Color.gray;
-        }
-        else
-        {
-            // Set background color to white
-            m_Background.color = Color.white;
-        }
-
-        m_Background.raycastTarget = m_IsToggleUnlocked;
-        m_Checkmark.raycastTarget = m_IsToggleUnlocked;
-    }
 
     public void SetToggleUnlocked(bool isUnlocked)
     {
@@ -35,13 +22,11 @@ public class CollisionToggleButton : MonoBehaviour
 
         if (!isUnlocked)
         {
-            // Set background color to gray
-            m_Background.color = Color.gray;
+            m_Background.sprite = m_DisabledBackground;
         }
         else
         {
-            // Set background color to white
-            m_Background.color = Color.white;
+            m_Background.sprite = m_EnabledBackground;
         }
     }
 
