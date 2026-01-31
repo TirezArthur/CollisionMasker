@@ -155,6 +155,29 @@ public class CollisionUIBehaviour : MonoBehaviour
         }
     }
 
+    public void UnlockByLayer(LayerMask layerMask)
+    {
+        CollisionToggleButton[] toggleButtons = m_GridGroup.GetComponentsInChildren<CollisionToggleButton>();
+
+        // Put all locked layers that are not in the layer mask in a variable
+        LayerMask layerMaskDiff = m_LockedLayers & (~layerMask);
+
+        foreach (CollisionToggleButton toggle in toggleButtons)
+        {
+            int layer1 = toggle.m_IgnoreLayer1.value;
+            int layer2 = toggle.m_IgnoreLayer2.value;
+            if (((layerMask.value & layer1) != 0) || ((layerMask.value & layer2) != 0))
+            {
+                if ((layerMaskDiff.value & layer1) != 0 || (layerMaskDiff.value & layer2) != 0)
+                {
+                    continue;
+                }
+                
+                toggle.SetToggleUnlocked(true);
+            }
+        }
+    }
+
     private void ToggleCanvas(bool isEnabled)
     {
         m_CanvasObject.SetActive(isEnabled);
