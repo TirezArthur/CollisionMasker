@@ -1,66 +1,121 @@
-Shader "Unlit/TexturedWireframe" {
-    Properties {
-        _MainTex ("Base Texture", 2D) = "white" {}
-        _BaseColor("Base Color", Color) = (0, 0, 0, 1)
-        _WireColor ("Wire Color", Color) = (0, 1, 0, 1)
-        _Thickness ("Wire Thickness", Range(0, 5)) = 1
-        _WireOpacity ("Wire Opacity", Range(0, 1)) = 1
+Shader "URP/FullyLitWireframe_HighContrast"
+{
+    Properties
+    {
+        _MainTex("Albedo", 2D) = "white" {}
+        _WireColor("Wire Color", Color) = (0, 1, 0, 1)
+        _BaseColor("Base Color", Color) = (0, 1, 0, 1)
+        _Thickness("Thickness", Range(0, 10)) = 1
+        _WireEmission("Wire Emission", Range(0, 5)) = 1
+        _AmbientStrength("Ambient Strength", Range(0, 1)) = 0.2
     }
-    SubShader {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry" }
-        LOD 100
 
-        Pass {
-            CGPROGRAM
+    SubShader
+    {
+        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" "Queue" = "Geometry" }
+
+        Pass
+        {
+            Name "ForwardLit"
+            Tags { "LightMode" = "UniversalForward" }
+
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
+            
+            // --- MANDATORY FOR SPOTLIGHTS & POINT LIGHTS ---
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            // -----------------------------------------------
 
-            struct appdata {
-                float4 vertex : POSITION;
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
+                float3 normalOS : NORMAL;
             };
 
-            struct v2f {
-                float4 pos : SV_POSITION;
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float3 positionWS : TEXCOORD1;
                 float2 uv : TEXCOORD0;
+                float3 normalWS : TEXCOORD2;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            fixed4 _WireColor;
-            fixed4 _BaseColor;
+            float4 _WireColor;
+            float4 _BaseColor;
             float _Thickness;
-            float _WireOpacity;
+            float _WireEmission;
+            float _AmbientStrength;
 
-            v2f vert (appdata v) {
-                v2f o;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                // Standard UV tiling and offset support
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                return o;
+            Varyings vert(Attributes input)
+            {
+                Varyings output;
+                VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
+                output.positionCS = vertexInput.positionCS;
+                output.positionWS = vertexInput.positionWS;
+                output.uv = TRANSFORM_TEX(input.uv, _MainTex);
+                output.normalWS = TransformObjectToWorldNormal(input.normalOS);
+                return output;
             }
 
-            fixed4 frag (v2f i) : SV_Target {
-                // 1. Sample the base texture
-                fixed4 texCol = tex2D(_MainTex, i.uv);
-                texCol = texCol * _BaseColor;
+            half4 frag(Varyings input) : SV_Target
+            {
+                float3 normalWS = normalize(input.normalWS);
                 
-                // 2. Calculate the wireframe mask using screen-space derivatives
-                // fwidth ensures the lines stay a consistent width regardless of distance
-                float2 derivative = fwidth(i.uv);
-                float2 lineGrid = smoothstep(derivative * _Thickness, 0, abs(frac(i.uv - 0.5) - 0.5));
+                // 1. Wireframe Mask
+                float2 uv = input.uv;
+                float2 fw = fwidth(uv) * _Thickness;
+                float2 edge = smoothstep(fw, 0, abs(frac(uv - 0.5) - 0.5));
+                float mask = max(edge.x, edge.y);
+
+                // 2. Lighting Setup
+                float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
                 
-                // Combine U and V lines into a single mask
-                float mask = max(lineGrid.x, lineGrid.y);
+                // Main Light
+                Light mainLight = GetMainLight(shadowCoord);
+                float3 lightAcc = mainLight.color * (saturate(dot(normalWS, mainLight.direction)) * mainLight.shadowAttenuation);
                 
-                // 3. Blend the texture color with the wire color
-                // We multiply mask by _WireOpacity so you can fade the wires out
-                fixed4 finalCol = lerp(texCol, _WireColor, mask * _WireOpacity);
+// --- FORCED ADDITIONAL LIGHTS ---
+uint pixelLightCount = GetAdditionalLightsCount();
+for (uint i = 0u; i < pixelLightCount; ++i)
+{
+    // We use the simple signature to avoid shadow-matching issues on Metal
+    Light light = GetAdditionalLight(i, input.positionWS);
+    
+    // Check if the light is actually contributing
+    float3 diffuse = light.color * (saturate(dot(normalWS, light.direction)) * light.distanceAttenuation);
+    lightAcc += diffuse;
+}
+
+                // 3. Combine
+                float3 texSample = tex2D(_MainTex, input.uv).rgb;
+                float3 baseAlbedo = lerp(texSample, _WireColor.rgb, mask);
+                baseAlbedo += float3(0.5,0.5,0.5);
+                baseAlbedo *= _BaseColor;
                 
-                return finalCol;
+                // Ambient
+                float3 ambient = SampleSH(normalWS) * _AmbientStrength;
+                
+                // Multiply albedo by (Direct Light + Ambient)
+                float3 finalColor = baseAlbedo * (lightAcc + ambient);
+                
+                // Add Glow
+                finalColor += _WireColor.rgb * mask * _WireEmission;
+
+                return half4(finalColor, 1.0);
             }
-            ENDCG
+            ENDHLSL
         }
     }
+    FallBack "Universal Render Pipeline/Lit"
 }
