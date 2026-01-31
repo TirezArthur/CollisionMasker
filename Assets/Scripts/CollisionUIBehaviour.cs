@@ -68,6 +68,8 @@ public class CollisionUIBehaviour : MonoBehaviour
             return;
         }
 
+        Key.KeyPickedUp += pair => UnlockByPair(pair.layer1, pair.layer2, true);
+
         InitialiseCanvas();
 
         InitialiseCollisionGrid();

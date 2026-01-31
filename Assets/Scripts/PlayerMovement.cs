@@ -75,6 +75,12 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log($"{name} collided with {other.gameObject.name}");
             _died = true;
         }
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Key"))
+        {
+            Debug.Log($"{name} collided with {other.gameObject.name}");
+            Key key = other.gameObject.GetComponent<Key>();
+            key.Pickup();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
