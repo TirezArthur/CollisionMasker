@@ -102,6 +102,7 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _AmbientStrength: 0.2
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -135,6 +136,7 @@ Material:
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _Thickness: 2.24
+    - _WireEmission: 1
     - _WireOpacity: 0.848
     - _WireThickness: 362
     - _WireframeWidth: 1
@@ -142,7 +144,7 @@ Material:
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 0.59607846}
+    - _BaseColor: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
     - _Color: {r: 0.17924526, g: 0.17924526, b: 0.17924526, a: 1}
     - _EmissionColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
