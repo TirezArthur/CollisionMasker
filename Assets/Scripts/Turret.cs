@@ -7,6 +7,7 @@ public class Turret : MonoBehaviour
 {
     [SerializeField] private LayerMask _disablingLayers;
     [SerializeField] private GameObject? _bulletPrefab;
+    [SerializeField] private AudioClip? _shootSound;
     [SerializeField] private float _interval = 2f;
     [SerializeReference] private Transform? _bulletOrigin = null;
     private float _cooldown;
@@ -25,6 +26,7 @@ public class Turret : MonoBehaviour
             if (!_bulletPrefab) return;
             _cooldown += _interval;
             GameObject bullet = GameObject.Instantiate(_bulletPrefab, _bulletOrigin?.position ?? transform.position, Quaternion.LookRotation(transform.forward.With(y: 0)));
+            AudioSource.PlayClipAtPoint(_shootSound, transform.position);
         }
     }
 

@@ -265,6 +265,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 24576
   _bulletPrefab: {fileID: 5955043028239192895, guid: b29ef617c68b60a469516110ff380fa7, type: 3}
+  _shootSound: {fileID: 8300000, guid: b7c32a775cc2ee7499fe67e3ea7d20a2, type: 3}
   _interval: 2
   _bulletOrigin: {fileID: 542909169968878443}
 --- !u!136 &3614831255808230790
