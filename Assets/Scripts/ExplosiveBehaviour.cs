@@ -4,6 +4,7 @@ public class ExplosiveBehaviour : MonoBehaviour
 {
     [SerializeField] private LayerMask m_TargetMask;
     [SerializeField] private ParticleSystem m_ExplosionEffect;
+    [SerializeField] private AudioClip m_ExplosionSound;
 
     private void Start()
     {
@@ -28,6 +29,9 @@ public class ExplosiveBehaviour : MonoBehaviour
     private void Explode(Collider other)
     {
         m_ExplosionEffect.Play();
+
+        // Play sound
+        AudioSource.PlayClipAtPoint(m_ExplosionSound, transform.position);
 
         other.gameObject.GetComponent<Rigidbody>()?.AddExplosionForce(30f, transform.position, 5f);
 
