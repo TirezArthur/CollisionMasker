@@ -30,5 +30,7 @@ public class ExplosiveBehaviour : MonoBehaviour
         m_ExplosionEffect.Play();
 
         other.gameObject.GetComponent<Rigidbody>()?.AddExplosionForce(30f, transform.position, 5f);
+
+        Destroy(gameObject, 1f);
     }
 }

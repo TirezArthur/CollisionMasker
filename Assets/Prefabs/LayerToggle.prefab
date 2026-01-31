@@ -122,7 +122,7 @@ MonoBehaviour:
   m_DisabledBackground: {fileID: 21300000, guid: c855a1eb90faa694ea6713afe9b3063f, type: 3}
   m_FlickerTimer: 0
   m_FlickerCooldown: 0.2
-  m_MaxFlickers: 3
+  m_MaxFlickers: 5
 --- !u!1 &8123940287663638800
 GameObject:
   m_ObjectHideFlags: 0

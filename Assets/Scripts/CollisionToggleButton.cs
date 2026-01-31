@@ -18,9 +18,10 @@ public class CollisionToggleButton : MonoBehaviour
 
     private List<GameObject> m_VisualObjects1 = new List<GameObject>();
     private List<GameObject> m_VisualObjects2 = new List<GameObject>();
+
     [SerializeField] private float m_FlickerTimer = 0f;
-    [SerializeField] private float m_FlickerCooldown = 0.2f;
-    [SerializeField] private int m_MaxFlickers = 3;
+    [SerializeField] private float m_FlickerCooldown = .3f;
+    [SerializeField] private int m_MaxFlickers = 5;
 
     private int m_FlickerCount = 0;
     bool m_IsFlickering = false;
@@ -96,12 +97,11 @@ public class CollisionToggleButton : MonoBehaviour
 
             if (m_FlickerTimer >= m_FlickerCooldown)
             {
-                m_FlickerCount++;
-                m_FlickerTimer = 0f;
-
                 // Flicker the visuals
                 foreach (GameObject go in m_VisualObjects1)
                 {
+                    if (go == null) continue;
+
                     Renderer renderer = go.GetComponent<Renderer>();
 
                     if (renderer != null)
@@ -110,15 +110,23 @@ public class CollisionToggleButton : MonoBehaviour
                     }
                 }
 
-                foreach (GameObject go in m_VisualObjects2)
+                if (m_IgnoreLayer1 != m_IgnoreLayer2)
                 {
-                    Renderer renderer = go.GetComponent<Renderer>();
-
-                    if (renderer != null)
+                    foreach (GameObject go in m_VisualObjects2)
                     {
-                        renderer.enabled = !renderer.enabled;
+                        if (go == null) continue;
+
+                        Renderer renderer = go.GetComponent<Renderer>();
+
+                        if (renderer != null)
+                        {
+                            renderer.enabled = !renderer.enabled;
+                        }
                     }
                 }
+
+                m_FlickerTimer = 0f;
+                m_FlickerCount++;
 
                 // Stop flickering after max flickers
                 if (m_FlickerCount >= m_MaxFlickers)
@@ -128,6 +136,8 @@ public class CollisionToggleButton : MonoBehaviour
 
                     foreach (GameObject go in m_VisualObjects1)
                     {
+                        if (go == null) continue;
+
                         Renderer renderer = go.GetComponent<Renderer>();
 
                         if (renderer != null)
@@ -138,6 +148,8 @@ public class CollisionToggleButton : MonoBehaviour
 
                     foreach (GameObject go in m_VisualObjects2)
                     {
+                        if (go == null) continue;
+
                         Renderer renderer = go.GetComponent<Renderer>();
 
                         if (renderer != null)
@@ -157,6 +169,8 @@ public class CollisionToggleButton : MonoBehaviour
 
         foreach (GameObject go in all)
         {
+            if (go == null) continue;
+
             if (go.layer == layer)
             {
                 if (go.GetComponent<Renderer>() != null)
