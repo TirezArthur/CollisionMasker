@@ -27,7 +27,7 @@ Shader "URP/FullyLitWireframe_Transparent"
 
             // 2. Enable Alpha Blending and disable Z-Write (standard for transparent)
             Blend SrcAlpha OneMinusSrcAlpha
-            ZWrite Off
+            ZWrite On
 
             HLSLPROGRAM
             #pragma vertex vert

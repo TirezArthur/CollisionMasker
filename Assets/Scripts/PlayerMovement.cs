@@ -84,5 +84,10 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log($"{name} collided with {collision.gameObject.name}");
             _reachedEnd = true;
         }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Projectile"))
+        {
+            Debug.Log($"{name} collided with {collision.gameObject.name}");
+            _died = true;
+        }
     }
 }

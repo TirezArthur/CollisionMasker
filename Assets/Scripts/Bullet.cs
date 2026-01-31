@@ -11,11 +11,6 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag.Equals("Player"))
-        {
-            Debug.Log("Player got hit");
-        }
-
         Destroy(gameObject);
     }
 }
