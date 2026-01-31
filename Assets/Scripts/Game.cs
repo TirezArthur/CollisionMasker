@@ -106,6 +106,12 @@ public class Game : MonoBehaviour
 		_player = Instantiate(_playerPrefab).GetComponent<PlayerMovement>();
 		_player.transform.position = Vector3.zero;
 
+		_collisionUI.UnlockByLayer(_levels[index].LockedLayers, false);
+		foreach (LevelData.ToggleRule rule in _levels[index].ToggleConstraints)
+		{
+			_collisionUI.UnlockByPair(rule.layer1, rule.layer2, false);
+		}
+
 		GameState = State.Playing;
 	}
 

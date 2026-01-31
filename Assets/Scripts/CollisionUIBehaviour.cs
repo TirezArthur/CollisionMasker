@@ -156,7 +156,7 @@ public class CollisionUIBehaviour : MonoBehaviour
         }
     }
 
-    public void UnlockByLayer(LayerMask layerMask)
+    public void UnlockByLayer(LayerMask layerMask, bool isUnlocked)
     {
         // Put all locked layers that are not in the layer mask in a variable
         LayerMask layerMaskDiff = m_LockedLayers & (~layerMask);
@@ -172,7 +172,21 @@ public class CollisionUIBehaviour : MonoBehaviour
                     continue;
                 }
                 
-                toggle.SetToggleUnlocked(true);
+                toggle.SetToggleUnlocked(isUnlocked);
+            }
+        }
+    }
+
+    public void UnlockByPair(LayerMask layerMask1, LayerMask layerMask2, bool isUnlocked)
+    {
+        foreach (CollisionToggleButton toggle in m_ToggleButtons)
+        {
+            int layer1 = toggle.m_IgnoreLayer1.value;
+            int layer2 = toggle.m_IgnoreLayer2.value;
+            if (((layer1 & layerMask1.value) != 0 && (layer2 & layerMask2.value) != 0) || 
+                ((layer1 & layerMask2.value) != 0 && (layer2 & layerMask1.value) != 0))
+            {
+                toggle.SetToggleUnlocked(isUnlocked);
             }
         }
     }
@@ -182,6 +196,7 @@ public class CollisionUIBehaviour : MonoBehaviour
         foreach(CollisionToggleButton toggle in m_ToggleButtons)
         {
             toggle.ToggleCollision(true, false);
+            toggle.SetToggleUnlocked(true);
         }
     }
 
