@@ -568,11 +568,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffb6f694768ede14dbe73810bfe8941c, type: 3}
---- !u!1 &223977658 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3453096552112849565, guid: ffb6f694768ede14dbe73810bfe8941c, type: 3}
+--- !u!114 &223977659 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7615632878655793196, guid: ffb6f694768ede14dbe73810bfe8941c, type: 3}
   m_PrefabInstance: {fileID: 223977657}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3dbc13c5b9873c4494b6e2d7bb2aa7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIBehaviour
 --- !u!1 &309036324
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,7 +912,7 @@ GameObject:
   - component: {fileID: 1109665568}
   m_Layer: 0
   m_Name: Menu Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1014,7 +1020,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b9311514ddcad8c40b789d95c8e431c7, type: 2}
   _gameCanvas: {fileID: 1307059615}
   _menuCamera: {fileID: 1109665568}
-  _collisionUI: {fileID: 223977658}
+  _collisionUI: {fileID: 223977659}
   _menuButton: {fileID: 890411361}
   _restartButton: {fileID: 472071753}
   _menuCanvas: {fileID: 210481861}

@@ -87,7 +87,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1798160011095344652}
         m_TargetAssemblyTypeName: CollisionToggleButton, Assembly-CSharp
-        m_MethodName: ToggleCollision
+        m_MethodName: ToggleUiCallback
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

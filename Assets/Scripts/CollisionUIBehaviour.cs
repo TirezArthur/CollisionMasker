@@ -1,7 +1,5 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEngine.LowLevelPhysics2D.PhysicsLayers;
 
 public class CollisionUIBehaviour : MonoBehaviour
 {
@@ -16,6 +14,8 @@ public class CollisionUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject m_LabelPrefab;
 
     [SerializeField] private LayerMask m_LockedLayers;
+
+    private List<CollisionToggleButton> m_ToggleButtons = new();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -115,6 +115,7 @@ public class CollisionUIBehaviour : MonoBehaviour
 
                     // Set layers
                     CollisionToggleButton collisionToggle = toggleButton.GetComponent<CollisionToggleButton>();
+                    m_ToggleButtons.Add(collisionToggle);
                     collisionToggle.m_IgnoreLayer1 = LayerMask.GetMask(layerName);
                     collisionToggle.m_IgnoreLayer2 = LayerMask.GetMask(defaultLayerName);
 
@@ -157,12 +158,10 @@ public class CollisionUIBehaviour : MonoBehaviour
 
     public void UnlockByLayer(LayerMask layerMask)
     {
-        CollisionToggleButton[] toggleButtons = m_GridGroup.GetComponentsInChildren<CollisionToggleButton>();
-
         // Put all locked layers that are not in the layer mask in a variable
         LayerMask layerMaskDiff = m_LockedLayers & (~layerMask);
 
-        foreach (CollisionToggleButton toggle in toggleButtons)
+        foreach (CollisionToggleButton toggle in m_ToggleButtons)
         {
             int layer1 = toggle.m_IgnoreLayer1.value;
             int layer2 = toggle.m_IgnoreLayer2.value;
@@ -175,6 +174,14 @@ public class CollisionUIBehaviour : MonoBehaviour
                 
                 toggle.SetToggleUnlocked(true);
             }
+        }
+    }
+
+    public void ResetAll()
+    {
+        foreach(CollisionToggleButton toggle in m_ToggleButtons)
+        {
+            toggle.ToggleCollision(true, false);
         }
     }
 

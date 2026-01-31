@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Toggle))]
 public class CollisionToggleButton : MonoBehaviour
 {
     public LayerMask m_IgnoreLayer1;
@@ -42,7 +43,9 @@ public class CollisionToggleButton : MonoBehaviour
         }
     }
 
-    public void ToggleCollision(bool isEnabled)
+    public void ToggleUiCallback(bool isEnabled) => ToggleCollision(isEnabled, true);
+
+    public void ToggleCollision(bool isEnabled, bool doFlicker = true)
     {
         // Get index of layer from LayerMask
         int layerNumber = 0;
@@ -66,6 +69,15 @@ public class CollisionToggleButton : MonoBehaviour
 
         // Disable collision between the two layers
         Physics.IgnoreLayerCollision(layerNumber, layerNumber2, !isEnabled);
+
+        if (!doFlicker)
+        {
+            GetComponent<Toggle>().isOn = isEnabled;
+            m_VisualObjects1.Clear();
+            m_VisualObjects2.Clear();
+            m_IsFlickering = false;
+            return;
+        }
 
         m_VisualObjects1 = FindObjectsByLayer(layerNumber);
         m_VisualObjects2 = FindObjectsByLayer(layerNumber2);

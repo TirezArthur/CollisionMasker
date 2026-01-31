@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +17,7 @@ public class Game : MonoBehaviour
 	[Header("Game UI")]
 	[SerializeReference] Canvas _gameCanvas;
 	[SerializeReference] CinemachineCamera _menuCamera;
-	[SerializeReference] GameObject _collisionUI;
+	[SerializeReference] CollisionUIBehaviour _collisionUI;
 	[SerializeReference] Button _menuButton;
 	[SerializeReference] Button _restartButton;
 
@@ -39,6 +38,7 @@ public class Game : MonoBehaviour
             _gameCanvas.gameObject.SetActive(value == State.Playing);
             _menuCanvas.gameObject.SetActive(value == State.MenuMain);
 			_menuCamera.enabled = value != State.Playing;
+
 			_state = value;
 		}
 		get => _state;
@@ -106,11 +106,10 @@ public class Game : MonoBehaviour
 		_player = Instantiate(_playerPrefab).GetComponent<PlayerMovement>();
 		_player.transform.position = Vector3.zero;
 
-		_collisionUI.SetActive(true);
 		GameState = State.Playing;
 	}
 
-	void UnloadLevel()
+	private void UnloadLevel()
 	{
         // destroy player
         if (_player != null)
@@ -118,5 +117,6 @@ public class Game : MonoBehaviour
         // destroy previous level
         if (_levelRoot.transform.childCount > 0)
             Destroy(_levelRoot.transform.GetChild(0).gameObject);
+		_collisionUI.ResetAll();
     }
 }
