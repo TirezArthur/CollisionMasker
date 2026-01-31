@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
         Rigidbody rbCollision = collision.gameObject.GetComponent<Rigidbody>();
         if (rbCollision != null)
         {
-            rbCollision.AddExplosionForce(15f, collision.transform.position, 5f);
+            rbCollision.AddExplosionForce(200f, transform.position, 5f);
         }
 
         // Destroy the bullet
