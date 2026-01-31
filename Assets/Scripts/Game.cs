@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityUtils;
 
 public class Game : MonoBehaviour
 {
@@ -27,9 +31,18 @@ public class Game : MonoBehaviour
     [SerializeReference] Button _levelsButton;
     [SerializeReference] Button _quitButton;
 
+	[Header("Level UI")]
+	[SerializeReference] Canvas _levelCanvas;
+	[SerializeReference] Button _backButton;
+    [SerializeReference] Button _clearButton;
+	[SerializeReference] GameObject _levelButtonPrefab;
+	[SerializeReference] RectTransform _levelsList;
+
     private State _state = State.MenuMain;
 	private PlayerMovement _player;
 	private int _currentLevel = 0;
+
+	public event UnityAction<int> OnLevelComplete = delegate { };
 
 	private State GameState
 	{
@@ -37,7 +50,8 @@ public class Game : MonoBehaviour
 		{
             _gameCanvas.gameObject.SetActive(value == State.Playing);
             _menuCanvas.gameObject.SetActive(value == State.MenuMain);
-			_menuCamera.enabled = value != State.Playing;
+            _levelCanvas.gameObject.SetActive(value == State.MenuLevels);
+            _menuCamera.enabled = value != State.Playing;
 
 			_state = value;
 		}
@@ -56,7 +70,24 @@ public class Game : MonoBehaviour
 		_restartButton.onClick.AddListener(() => LoadLevel(_currentLevel));
 
 		_playButton.onClick.AddListener(() => LoadLevel(FirstUncompletedLevel()));
+		_levelsButton.onClick.AddListener(() => GameState = State.MenuLevels);
         _quitButton.onClick.AddListener(() => Application.Quit());
+
+		_backButton.onClick.AddListener(() => GameState = State.MenuMain);
+		_clearButton.onClick.AddListener(() =>
+		{
+			foreach (LevelData level in _levels) level.Completed = false;
+			foreach (Transform levelButton in _levelsList.Children()) levelButton.GetComponent<LevelButton>().Reset();
+		});
+
+		if (!_levelsList || !_levelButtonPrefab) return;
+		for (int levelIndex = 0; levelIndex < _levels.Count; ++levelIndex)
+		{
+			GameObject levelButton = GameObject.Instantiate(_levelButtonPrefab, _levelsList);
+			levelButton.GetComponentInChildren<TextMeshProUGUI>().SetText((levelIndex + 1).ToString());
+			levelButton.GetComponent<LevelButton>()._level = levelIndex;
+            levelButton.GetComponent<LevelButton>()._game = this;
+        }
     }
 
 	void Update()
@@ -71,7 +102,8 @@ public class Game : MonoBehaviour
 			else if (_player.ReachedEnd)
 			{
 				_levels[_currentLevel].Completed = true;
-				LoadLevel(_currentLevel + 1);
+                OnLevelComplete.Invoke(_currentLevel);
+                LoadLevel(_currentLevel + 1);
 			}
 		}
 	}
@@ -85,7 +117,7 @@ public class Game : MonoBehaviour
 		return _levels.Count - 1;
 	}
 
-	void LoadLevel(int index)
+	public void LoadLevel(int index)
 	{
 		Debug.Log("Loading level " + index);
 
