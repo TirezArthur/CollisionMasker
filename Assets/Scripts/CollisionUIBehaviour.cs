@@ -15,6 +15,8 @@ public class CollisionUIBehaviour : MonoBehaviour
     [SerializeField] private GameObject m_TogglePrefab;
     [SerializeField] private GameObject m_LabelPrefab;
 
+    [SerializeField] private LayerMask m_LockedLayers;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -112,8 +114,15 @@ public class CollisionUIBehaviour : MonoBehaviour
                     // TODO: Implement initial grid state if needed
 
                     // Set layers
-                    toggleButton.GetComponent<CollisionToggleButton>().m_IgnoreLayer1 = LayerMask.GetMask(layerName);
-                    toggleButton.GetComponent<CollisionToggleButton>().m_IgnoreLayer2 = LayerMask.GetMask(defaultLayerName);
+                    CollisionToggleButton collisionToggle = toggleButton.GetComponent<CollisionToggleButton>();
+                    collisionToggle.m_IgnoreLayer1 = LayerMask.GetMask(layerName);
+                    collisionToggle.m_IgnoreLayer2 = LayerMask.GetMask(defaultLayerName);
+
+                    if ((m_LockedLayers.value & (1 << leftIdx)) != 0 ||
+                        (m_LockedLayers.value & (1 << topIdx)) != 0)
+                    {
+                        collisionToggle.SetToggleUnlocked(false);
+                    }
 
                     // Adjust grid size to fit new button
                     if (layerCount < 1)
@@ -143,6 +152,29 @@ public class CollisionUIBehaviour : MonoBehaviour
             }
 
             layerCount++;
+        }
+    }
+
+    public void UnlockByLayer(LayerMask layerMask)
+    {
+        CollisionToggleButton[] toggleButtons = m_GridGroup.GetComponentsInChildren<CollisionToggleButton>();
+
+        // Put all locked layers that are not in the layer mask in a variable
+        LayerMask layerMaskDiff = m_LockedLayers & (~layerMask);
+
+        foreach (CollisionToggleButton toggle in toggleButtons)
+        {
+            int layer1 = toggle.m_IgnoreLayer1.value;
+            int layer2 = toggle.m_IgnoreLayer2.value;
+            if (((layerMask.value & layer1) != 0) || ((layerMask.value & layer2) != 0))
+            {
+                if ((layerMaskDiff.value & layer1) != 0 || (layerMaskDiff.value & layer2) != 0)
+                {
+                    continue;
+                }
+                
+                toggle.SetToggleUnlocked(true);
+            }
         }
     }
 
