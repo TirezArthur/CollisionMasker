@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
@@ -11,7 +10,7 @@ public class Game : MonoBehaviour
 {
 	enum State
 	{
-		MenuMain, MenuLevels, Playing
+		Main, Levels, Credits, Playing
 	}
 	
 	[SerializeReference] GameObject _playerPrefab;
@@ -29,6 +28,7 @@ public class Game : MonoBehaviour
     [SerializeReference] Canvas _menuCanvas;
     [SerializeReference] Button _playButton;
     [SerializeReference] Button _levelsButton;
+    [SerializeReference] Button _creditsButton;
     [SerializeReference] Button _quitButton;
 
 	[Header("Level UI")]
@@ -38,7 +38,11 @@ public class Game : MonoBehaviour
 	[SerializeReference] GameObject _levelButtonPrefab;
 	[SerializeReference] RectTransform _levelsList;
 
-    private State _state = State.MenuMain;
+	[Header("Credits UI")]
+	[SerializeReference] Canvas _creditsCanvas;
+	[SerializeReference] Button _backButtonCred;
+
+    private State _state = State.Main;
 	private PlayerMovement _player;
 	private int _currentLevel = 0;
 
@@ -49,8 +53,9 @@ public class Game : MonoBehaviour
 		set
 		{
             _gameCanvas.gameObject.SetActive(value == State.Playing);
-            _menuCanvas.gameObject.SetActive(value == State.MenuMain);
-            _levelCanvas.gameObject.SetActive(value == State.MenuLevels);
+            _menuCanvas.gameObject.SetActive(value == State.Main);
+			_levelCanvas.gameObject.SetActive(value == State.Levels);
+            _creditsCanvas.gameObject.SetActive(value == State.Credits);
             _menuCamera.enabled = value != State.Playing;
 
 			_state = value;
@@ -60,25 +65,28 @@ public class Game : MonoBehaviour
 
 	void Start()
 	{
-		GameState = State.MenuMain;
+		GameState = State.Main;
 		
 		_menuButton.onClick.AddListener(() =>
 		{
 			UnloadLevel();
-			GameState = State.MenuMain;
+			GameState = State.Main;
 		});
 		_restartButton.onClick.AddListener(() => LoadLevel(_currentLevel));
 
 		_playButton.onClick.AddListener(() => LoadLevel(FirstUncompletedLevel()));
-		_levelsButton.onClick.AddListener(() => GameState = State.MenuLevels);
+		_levelsButton.onClick.AddListener(() => GameState = State.Levels);
+		_creditsButton.onClick.AddListener(() => GameState = State.Credits);
         _quitButton.onClick.AddListener(() => Application.Quit());
 
-		_backButton.onClick.AddListener(() => GameState = State.MenuMain);
+		_backButton.onClick.AddListener(() => GameState = State.Main);
 		_clearButton.onClick.AddListener(() =>
 		{
 			foreach (LevelData level in _levels) level.Completed = false;
 			foreach (Transform levelButton in _levelsList.Children()) levelButton.GetComponent<LevelButton>().Reset();
 		});
+
+		_backButtonCred.onClick.AddListener(() => GameState = State.Main);
 
 		if (!_levelsList || !_levelButtonPrefab) return;
 		for (int levelIndex = 0; levelIndex < _levels.Count; ++levelIndex)
@@ -125,7 +133,7 @@ public class Game : MonoBehaviour
 
 		if (index >= _levels.Count)
 		{
-			GameState = State.MenuMain;
+			GameState = State.Main;
 			return;
 		}
 		
