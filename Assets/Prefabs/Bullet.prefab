@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3727028678691621920}
   - component: {fileID: 4699778967600541754}
   - component: {fileID: 8496654883873740424}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 2352285127304239572}
   - component: {fileID: 4163371406529341012}
   - component: {fileID: 6488994183569115053}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b002eb340c54041b88366b86b4180e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  _speed: 5
+  _speed: 10
 --- !u!54 &6488994183569115053
 Rigidbody:
   m_ObjectHideFlags: 0
