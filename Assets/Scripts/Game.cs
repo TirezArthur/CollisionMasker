@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -14,9 +15,12 @@ public class Game : MonoBehaviour
 	[SerializeReference] Camera _menuCamera;
 	[SerializeReference] Camera _playerCamera;
 	[SerializeReference] GameObject _collisionUI;
+	[SerializeReference] Button _reloadButton;
+	[SerializeReference] Button _restartButton;
 
 	private State _state = State.Menu;
 	private PlayerMovement _player;
+	private int _currentLevel = 0;
 
 	void Start()
 	{
@@ -39,6 +43,7 @@ public class Game : MonoBehaviour
 	void LoadLevel(int index)
 	{
 		Debug.Log("Loading level " + index);
+		_currentLevel = index;
 			
 		// load level prefab
 		GameObject level = _levels[index];
