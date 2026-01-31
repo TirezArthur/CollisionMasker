@@ -116,6 +116,8 @@ MonoBehaviour:
   m_IgnoreLayer2:
     serializedVersion: 2
     m_Bits: 0
+  m_Background: {fileID: 3176861558847001001}
+  m_Checkmark: {fileID: 8109181692985805638}
 --- !u!1 &8123940287663638800
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
