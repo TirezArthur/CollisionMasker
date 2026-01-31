@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 750e4c5799aa4c84cbc34cb41744071b, type: 3}
   m_Name: Level2
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  _completed: 1
+  _completed: 0
   _prefab: {fileID: 8476351858752860087, guid: 42c61cf14755e4465a44af3c7604448e, type: 3}
