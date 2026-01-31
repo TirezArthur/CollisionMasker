@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // If bullet hits bullet, create impact effect
         if (collision.gameObject.layer == gameObject.layer)
         {
             GameObject effect = Instantiate(_impactEffectPrefab);
@@ -19,6 +20,14 @@ public class Bullet : MonoBehaviour
             Destroy(effect, 2f);
         }
 
+        // Apply explosion force to the collided object if it has a Rigidbody
+        Rigidbody rbCollision = collision.gameObject.GetComponent<Rigidbody>();
+        if (rbCollision != null)
+        {
+            rbCollision.AddExplosionForce(5f, collision.transform.position, 5f);
+        }
+
+        // Destroy the bullet
         Destroy(gameObject);
     }
 }

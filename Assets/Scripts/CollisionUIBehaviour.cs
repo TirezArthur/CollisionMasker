@@ -1,17 +1,30 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CollisionUIBehaviour : MonoBehaviour
 {
+    [Serializable]
+    public struct LayerIcon
+    {
+        public LayerMask layer;
+        public Sprite icon;
+    }
+
     [SerializeField] private GameObject m_CanvasObject;
     private Canvas m_Canvas;
+
+    [SerializeField] private float m_Offset = 5f;
 
     [SerializeField] private RectTransform m_VerticalLayoutGroup;
     [SerializeField] private RectTransform m_HorizontalLayoutGroup;
     [SerializeField] private RectTransform m_GridGroup;
 
     [SerializeField] private GameObject m_TogglePrefab;
-    [SerializeField] private GameObject m_LabelPrefab;
+    [SerializeField] private GameObject m_IconPrefab;
+
+    [SerializeField] private List<LayerIcon> m_LayerIcons = new();
 
     [SerializeField] private LayerMask m_LockedLayers;
 
@@ -49,7 +62,7 @@ public class CollisionUIBehaviour : MonoBehaviour
         }
 
         // Make sure there is a Label prefab assigned
-        if (m_LabelPrefab == null)
+        if (m_IconPrefab == null)
         {
             Debug.LogWarning("No Label Prefab assigned");
             return;
@@ -99,7 +112,7 @@ public class CollisionUIBehaviour : MonoBehaviour
                 continue;
             }
 
-            m_GridGroup.GetComponent<RectTransform>().sizeDelta += new Vector2(0, m_TogglePrefab.GetComponent<RectTransform>().sizeDelta.y);
+            m_GridGroup.GetComponent<RectTransform>().sizeDelta += new Vector2(0, m_TogglePrefab.GetComponent<RectTransform>().sizeDelta.y + m_Offset);
 
             for (int topIdx = maxLayers - 1; topIdx >= leftIdx; topIdx--)
             {
@@ -129,16 +142,34 @@ public class CollisionUIBehaviour : MonoBehaviour
                     if (layerCount < 1)
                     {
                         // Create labels for this layer
-                        GameObject sideLabel = Instantiate(m_LabelPrefab, m_VerticalLayoutGroup);
-                        sideLabel.GetComponent<TMPro.TextMeshProUGUI>().text = layerName;
-                        m_VerticalLayoutGroup.sizeDelta += new Vector2(0, sideLabel.GetComponent<RectTransform>().sizeDelta.y);
+                        GameObject sideLabel = Instantiate(m_IconPrefab, m_VerticalLayoutGroup);
 
-                        GameObject topLabel = Instantiate(m_LabelPrefab, m_HorizontalLayoutGroup);
-                        topLabel.GetComponent<TMPro.TextMeshProUGUI>().text = layerName;
-                        m_HorizontalLayoutGroup.sizeDelta += new Vector2(0, sideLabel.GetComponent<RectTransform>().sizeDelta.y);
+                        // Get sideLabel icon
+                        Sprite sideIcon = null;
+                        foreach (LayerIcon layerIcon in m_LayerIcons)
+                        {
+                            if (layerIcon.layer == LayerMask.GetMask(layerName))
+                            {
+                                sideIcon = layerIcon.icon;
+                                break;
+                            }
+                        }
+
+                        if (sideIcon != null)
+                        {
+                            sideLabel.GetComponent<UnityEngine.UI.Image>().sprite = sideIcon;
+                        }
+
+                        m_VerticalLayoutGroup.sizeDelta += new Vector2(0, sideLabel.GetComponent<RectTransform>().sizeDelta.y + m_Offset);
+
+                        GameObject topLabel = Instantiate(m_IconPrefab, m_HorizontalLayoutGroup);
+                        topLabel.GetComponent<UnityEngine.UI.Image>().sprite = sideIcon;
+
+                        // Adjust layout sizes
+                        m_HorizontalLayoutGroup.sizeDelta += new Vector2(sideLabel.GetComponent<RectTransform>().sizeDelta.x + m_Offset, 0);
 
                         m_GridGroup.GetComponent<RectTransform>().sizeDelta += new Vector2(
-                            toggleButton.GetComponent<RectTransform>().sizeDelta.x,
+                            toggleButton.GetComponent<RectTransform>().sizeDelta.x + m_Offset,
                             0
                         );
                     }

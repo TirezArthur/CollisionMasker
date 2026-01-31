@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1037891331182457804}
-  - component: {fileID: 8495582645993737100}
+  - component: {fileID: 8115074959078974090}
   m_Layer: 5
   m_Name: LabelsTop
   m_TagString: Untagged
@@ -24,19 +24,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1099742764175911797}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4772012142288800094}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: 0}
-  m_SizeDelta: {x: 150, y: 0}
+  m_AnchoredPosition: {x: 50, y: -50}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &8495582645993737100
+--- !u!114 &8115074959078974090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,23 +45,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1099742764175911797}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
     m_Left: 0
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 6
-  m_Spacing: 0
+  m_ChildAlignment: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
+  m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
-  m_ReverseArrangement: 1
+  m_ReverseArrangement: 0
 --- !u!1 &1336211300377874954
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,11 +246,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIBehaviour
   m_CanvasObject: {fileID: 5435398250150055667}
+  m_Offset: 5
   m_VerticalLayoutGroup: {fileID: 6116554740134747804}
   m_HorizontalLayoutGroup: {fileID: 1037891331182457804}
   m_GridGroup: {fileID: 9139251897600410759}
   m_TogglePrefab: {fileID: 6139442690105077934, guid: 7cd8a76af0f45c94cbf0f8a71964cb4d, type: 3}
-  m_LabelPrefab: {fileID: 3340045499460037473, guid: 661e2ba00fdb7fd4a851a332c330c3b8, type: 3}
+  m_IconPrefab: {fileID: 3340045499460037473, guid: 661e2ba00fdb7fd4a851a332c330c3b8, type: 3}
+  m_LayerIcons:
+  - layer:
+      serializedVersion: 2
+      m_Bits: 1024
+    icon: {fileID: 21300000, guid: b344f435f891f5148ac1568c7782018c, type: 3}
+  - layer:
+      serializedVersion: 2
+      m_Bits: 2048
+    icon: {fileID: 21300000, guid: 444aa1e3674c7474ea9665d10514fadb, type: 3}
+  - layer:
+      serializedVersion: 2
+      m_Bits: 4096
+    icon: {fileID: 21300000, guid: 26e04fbd15a21e34c80f7db765943f7f, type: 3}
+  - layer:
+      serializedVersion: 2
+      m_Bits: 8192
+    icon: {fileID: 21300000, guid: d593bc288aece0d44af95b8f30727780, type: 3}
+  - layer:
+      serializedVersion: 2
+      m_Bits: 16384
+    icon: {fileID: 21300000, guid: 325cf53261ef07d4f93e74bf6cd64109, type: 3}
   m_LockedLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -424,7 +446,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: -150}
+  m_AnchoredPosition: {x: 50, y: -50}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &4854357456260952061
@@ -448,7 +470,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 50, y: 50}
-  m_Spacing: {x: 0, y: 0}
+  m_Spacing: {x: 5, y: 5}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &5369365094142672237
@@ -710,8 +732,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -150}
-  m_SizeDelta: {x: 150, y: 0}
+  m_AnchoredPosition: {x: 0, y: -50}
+  m_SizeDelta: {x: 50, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &831874711644737352
 MonoBehaviour:
@@ -731,7 +753,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
