@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.LowLevelPhysics2D.PhysicsLayers;
 
 public class CollisionUIBehaviour : MonoBehaviour
 {
@@ -85,45 +86,63 @@ public class CollisionUIBehaviour : MonoBehaviour
         int layerCount = 0;
 
         int startIdx = 10;
-        string defaultLayerName = LayerMask.LayerToName(startIdx);
 
         // Go over all possible layers starting at a certain idx
-        for (int idx = startIdx; idx < maxLayers; idx++)
+        for (int leftIdx = startIdx; leftIdx < maxLayers; leftIdx++)
         {
-            string layerName = LayerMask.LayerToName(idx);
+            string defaultLayerName = LayerMask.LayerToName(leftIdx);
 
-            // If the layer is implemented
-            if (!string.IsNullOrEmpty(layerName))
+            if (string.IsNullOrEmpty(defaultLayerName))
             {
-                // Create labels for this layer
-                GameObject sideLabel = Instantiate(m_LabelPrefab, m_VerticalLayoutGroup);
-                sideLabel.GetComponent<TMPro.TextMeshProUGUI>().text = layerName;
-
-                GameObject topLabel = Instantiate(m_LabelPrefab, m_HorizontalLayoutGroup);
-                topLabel.GetComponent<TMPro.TextMeshProUGUI>().text = layerName;
-
-                // Create a toggle button for this layer
-                GameObject toggleButton = Instantiate(m_TogglePrefab, m_GridGroup);
-
-                // Set layers
-                toggleButton.GetComponent<CollisionToggleButton>().m_IgnoreLayer1 = LayerMask.GetMask(layerName);
-                toggleButton.GetComponent<CollisionToggleButton>().m_IgnoreLayer2 = LayerMask.GetMask(defaultLayerName);
-
-                // Adjust grid size to fit new button
-                m_GridGroup.GetComponent<RectTransform>().sizeDelta += new Vector2(
-                    toggleButton.GetComponent<RectTransform>().sizeDelta.x,
-                    0
-                );
-
-                // Increment counter
-                layerCount++;
+                continue;
             }
-        }
 
-        // Loop over layercount to create extra cells
-        for (int i = 0; i < layerCount; i++)
-        {
+            m_GridGroup.GetComponent<RectTransform>().sizeDelta += new Vector2(0, m_TogglePrefab.GetComponent<RectTransform>().sizeDelta.y);
 
+            for (int topIdx = maxLayers - 1; topIdx >= leftIdx; topIdx--)
+            {
+                string layerName = LayerMask.LayerToName(topIdx);
+
+                // If the layer is implemented
+                if (!string.IsNullOrEmpty(layerName))
+                {
+                    // Create a toggle button for this layer
+                    GameObject toggleButton = Instantiate(m_TogglePrefab, m_GridGroup);
+
+                    // TODO: Implement initial grid state if needed
+
+                    // Set layers
+                    toggleButton.GetComponent<CollisionToggleButton>().m_IgnoreLayer1 = LayerMask.GetMask(layerName);
+                    toggleButton.GetComponent<CollisionToggleButton>().m_IgnoreLayer2 = LayerMask.GetMask(defaultLayerName);
+
+                    // Adjust grid size to fit new button
+                    if (layerCount < 1)
+                    {
+                        // Create labels for this layer
+                        GameObject sideLabel = Instantiate(m_LabelPrefab, m_VerticalLayoutGroup);
+                        sideLabel.GetComponent<TMPro.TextMeshProUGUI>().text = layerName;
+                        m_VerticalLayoutGroup.sizeDelta += new Vector2(0, sideLabel.GetComponent<RectTransform>().sizeDelta.y);
+
+                        GameObject topLabel = Instantiate(m_LabelPrefab, m_HorizontalLayoutGroup);
+                        topLabel.GetComponent<TMPro.TextMeshProUGUI>().text = layerName;
+                        m_HorizontalLayoutGroup.sizeDelta += new Vector2(0, sideLabel.GetComponent<RectTransform>().sizeDelta.y);
+
+                        m_GridGroup.GetComponent<RectTransform>().sizeDelta += new Vector2(
+                            toggleButton.GetComponent<RectTransform>().sizeDelta.x,
+                            0
+                        );
+                    }
+                }
+            }
+
+            // For each covered layer, add an empty cell
+            for (int idx = 0; idx < layerCount; idx++)
+            {
+                GameObject emptyCell = new GameObject("EmptyCell", typeof(RectTransform));
+                emptyCell.transform.SetParent(m_GridGroup);
+            }
+
+            layerCount++;
         }
     }
 
