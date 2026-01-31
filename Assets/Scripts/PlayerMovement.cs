@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal.Internal;
 using UnityUtils;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -13,9 +14,11 @@ public class PlayerMovement : MonoBehaviour
     private InputAction _movementAction;
 
     // Physics
+    private Vector3 _lookDirection;
     private Rigidbody _rigidbody;
     private CapsuleCollider _collider;
-    [SerializeField] private float _movementSpeed;
+    [SerializeField] private float _movementSpeed = 10f;
+    [SerializeField] private float _rotationSpeed = 8f;
 
     private bool _died;
     public bool Died => _died;
@@ -51,10 +54,14 @@ public class PlayerMovement : MonoBehaviour
 
             direction += cameraTransform.forward.With(y: 0).normalized * inputDirection.y;
             direction += cameraTransform.right.With(y: 0).normalized * inputDirection.x;
+            _lookDirection = direction;
             direction = Vector3.ProjectOnPlane(direction, hit.normal);
 
             _rigidbody.AddForce(direction * _movementSpeed, ForceMode.Force);
+
         }
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(_lookDirection), _rotationSpeed);
     }
 
     private void OnTriggerEnter(Collider other)

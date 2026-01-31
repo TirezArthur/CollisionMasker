@@ -319,6 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   _inputAsset: {fileID: -944628639613478452, guid: 24a93b36afc9ca34b88ae87d6b3e16b0, type: 3}
   _movementSpeed: 60
+  _rotationSpeed: 8
 --- !u!1 &5987804802700324216
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +331,7 @@ GameObject:
   - component: {fileID: 3108524020737143117}
   - component: {fileID: 1974785617786345591}
   - component: {fileID: 4733448217738924913}
+  - component: {fileID: 8961992997142467414}
   m_Layer: 13
   m_Name: Camera
   m_TagString: Untagged
@@ -345,8 +347,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5987804802700324216}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20001954, y: 0.37358263, z: -0.082693994, w: 0.90199226}
-  m_LocalPosition: {x: -319.95038, y: 212.7592, z: -319.9497}
+  m_LocalRotation: {x: 0.19996414, y: 0.37361234, z: -0.08282786, w: 0.90197986}
+  m_LocalPosition: {x: -319.95007, y: 212.75923, z: -319.95004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -426,6 +428,40 @@ MonoBehaviour:
     Time: 0.2
     Smoothing: 0.3
     IgnoreY: 0
+--- !u!114 &8961992997142467414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5987804802700324216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d54399b04b4fa48a73e121d4937dd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePanTilt
+  ReferenceFrame: 1
+  RecenterTarget: 0
+  PanAxis:
+    Value: 45
+    Center: 0
+    Range: {x: -180, y: 180}
+    Wrap: 1
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  TiltAxis:
+    Value: 25
+    Center: 0
+    Range: {x: -70, y: 70}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
 --- !u!1001 &7251615271528614394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -448,7 +484,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6083051f070f24bdd8f7e287687c0ca7, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6083051f070f24bdd8f7e287687c0ca7, type: 3}
       propertyPath: m_LocalRotation.x
@@ -456,7 +492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6083051f070f24bdd8f7e287687c0ca7, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6083051f070f24bdd8f7e287687c0ca7, type: 3}
       propertyPath: m_LocalRotation.z
@@ -468,7 +504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6083051f070f24bdd8f7e287687c0ca7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6083051f070f24bdd8f7e287687c0ca7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
