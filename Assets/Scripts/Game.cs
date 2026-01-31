@@ -155,6 +155,7 @@ public class Game : MonoBehaviour
         // destroy previous level
         if (_levelRoot.transform.childCount > 0)
             Destroy(_levelRoot.transform.GetChild(0).gameObject);
+		foreach (Bullet bullet in FindObjectsByType<Bullet>(FindObjectsSortMode.None)) Destroy(bullet.gameObject);
 		_collisionUI.ResetAll();
     }
 }
