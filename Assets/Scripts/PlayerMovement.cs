@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
         _rigidbody = GetComponent<Rigidbody>();
         _collider = GetComponent<CapsuleCollider>();
+        _lookDirection = transform.forward;
     }
 
     public void Reset()
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
             direction += cameraTransform.forward.With(y: 0).normalized * inputDirection.y;
             direction += cameraTransform.right.With(y: 0).normalized * inputDirection.x;
+            direction.Normalize();
             _lookDirection = direction;
             direction = Vector3.ProjectOnPlane(direction, hit.normal);
 

@@ -5,6 +5,7 @@ using UnityUtils;
 
 public class Turret : MonoBehaviour
 {
+    [SerializeField] private LayerMask _disablingLayers;
     [SerializeField] private GameObject? _bulletPrefab;
     [SerializeField] private float _interval = 2f;
     [SerializeReference] private Transform? _bulletOrigin = null;
@@ -24,6 +25,15 @@ public class Turret : MonoBehaviour
             if (!_bulletPrefab) return;
             _cooldown += _interval;
             GameObject bullet = GameObject.Instantiate(_bulletPrefab, _bulletOrigin?.position ?? transform.position, Quaternion.LookRotation(transform.forward.With(y: 0)));
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (_disablingLayers.Contains(collision.collider.gameObject.layer))
+        {
+            Destroy(this);
+            Debug.Log($"{name} was disabled by {collision.collider.name}");
         }
     }
 }
