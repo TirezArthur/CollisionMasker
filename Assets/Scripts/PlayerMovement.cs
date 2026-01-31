@@ -21,7 +21,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 8f;
 
     private bool _died;
+    private bool _reachedEnd;
     public bool Died => _died;
+    public bool ReachedEnd => _reachedEnd;
 
     void Start()
     {
@@ -72,6 +74,15 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.Log($"{name} collided with {other.gameObject.name}");
             _died = true;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("End"))
+        {
+            Debug.Log($"{name} collided with {collision.gameObject.name}");
+            _reachedEnd = true;
         }
     }
 }

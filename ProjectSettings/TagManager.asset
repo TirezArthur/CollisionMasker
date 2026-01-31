@@ -11,8 +11,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Ground
+  - End
   - 
   - 
   - Door
@@ -20,7 +20,7 @@ TagManager:
   - Wall
   - Player
   - Bullet
-  - Ground
+  - 
   - 
   - 
   - 

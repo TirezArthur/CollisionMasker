@@ -15,7 +15,7 @@ public class Game : MonoBehaviour
 	[SerializeReference] Camera _menuCamera;
 	[SerializeReference] Camera _playerCamera;
 	[SerializeReference] GameObject _collisionUI;
-	[SerializeReference] Button _reloadButton;
+	[SerializeReference] Button _menuButton;
 	[SerializeReference] Button _restartButton;
 
 	private State _state = State.Menu;
@@ -26,16 +26,23 @@ public class Game : MonoBehaviour
 	{
 		// for now
 		LoadLevel(0);
+		
+		_menuButton.onClick.AddListener(() => LoadLevel(_currentLevel));
+		_restartButton.onClick.AddListener(() => LoadLevel(_currentLevel));
 	}
 
 	void Update()
 	{
 		if (_state == State.Playing)
 		{
-			// TODO check for player death or win
+			// check for player death or win
 			if (_player.Died)
 			{
-				
+				LoadLevel(_currentLevel);
+			}
+			else if (_player.ReachedEnd)
+			{
+				LoadLevel(_currentLevel + 1);
 			}
 		}
 	}
@@ -43,6 +50,19 @@ public class Game : MonoBehaviour
 	void LoadLevel(int index)
 	{
 		Debug.Log("Loading level " + index);
+		if (index >= _levels.Count)
+		{
+			// TODO back to menu, reloading level 1 for now
+			index = 0;
+		}
+		
+		// destroy player
+		if (_player != null)
+			Destroy(_player.gameObject);
+		// destroy previous level
+		if (_levelRoot.transform.childCount > 0)
+			Destroy(_levelRoot.transform.GetChild(0).gameObject);
+		
 		_currentLevel = index;
 			
 		// load level prefab
