@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7678038910354015821}
   - component: {fileID: 8972160530148614370}
   - component: {fileID: 4016614150402583773}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 542909169968878443}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: BulletOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 5735393461977913463}
   - component: {fileID: 8560507617963432344}
   - component: {fileID: 4577334894539328370}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: ba836ea445c0d419a9c2dd70669a81fe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 5696622802309419163}
   - component: {fileID: 3614831255808230790}
   - component: {fileID: 5441925586811205737}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}

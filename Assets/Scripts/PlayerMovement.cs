@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityUtils;
@@ -16,6 +17,9 @@ public class PlayerMovement : MonoBehaviour
     private CapsuleCollider _collider;
     [SerializeField] private float _movementSpeed;
 
+    private bool _died;
+    public bool Died => _died;
+
     void Start()
     {
         if (!_inputAsset) Debug.LogError($"No input asset assigned to {name}");
@@ -26,6 +30,11 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _collider = GetComponent<CapsuleCollider>();
     }
+
+    public void Reset()
+    {
+        _died = false;
+    }   
 
     private void FixedUpdate()
     {
@@ -45,6 +54,15 @@ public class PlayerMovement : MonoBehaviour
             direction = Vector3.ProjectOnPlane(direction, hit.normal);
 
             _rigidbody.AddForce(direction * _movementSpeed, ForceMode.Force);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            Debug.Log($"{name} collided with {other.gameObject.name}");
+            _died = true;
         }
     }
 }
