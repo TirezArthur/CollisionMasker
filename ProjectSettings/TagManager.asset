@@ -18,8 +18,8 @@ TagManager:
   - Door
   - Floor
   - Wall
-  - Player
-  - Bullet
+  - Entity
+  - Projectile
   - 
   - 
   - 
