@@ -7,23 +7,26 @@ public class LevelButton : MonoBehaviour
     public int _level;
     public Game _game;
     public Button _button;
+    private Image _image;
+    [SerializeField] private Color _completedColor;
+    private Color _originalColor;
 
     private void Start()
     {
         _button = GetComponent<Button>();
+        _image = GetComponent<Image>();
+        _originalColor = _image.color;
         _button.onClick.AddListener(() => _game.LoadLevel(_level));
         _game.OnLevelComplete += OnLevelComplete;
-        if (_level != 0) _button.interactable = false;
     }
 
     private void OnLevelComplete(int index)
     {
-        if (index == _level) _button.Select();
-        if (index == (_level - 1)) _button.interactable = true;
+        if (index == _level) _image.color = _completedColor;
     }
 
     public void Reset()
     {
-        if (_level != 0) _button.interactable = false;
+        _image.color = _originalColor;
     }
 }
