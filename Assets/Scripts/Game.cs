@@ -61,6 +61,7 @@ public class Game : MonoBehaviour
 	private bool _toolTipGone = false;
 	private float _toolTipTimer = 0f;
 	private int _toolTipDuration = 3;
+	private int _stashedLevelIdx = -1;
 
     public event UnityAction<int> OnLevelComplete = delegate { };
 
@@ -171,6 +172,7 @@ public class Game : MonoBehaviour
 				_tooltipCanvas.gameObject.SetActive(true);
                 _gameCanvas.gameObject.SetActive(true);
 
+				_levelCanvas.gameObject.SetActive(false);
                 _optionList.SetActive(false);
 
                 _toolTipShown = true;
@@ -186,9 +188,10 @@ public class Game : MonoBehaviour
 
                     _tooltipCanvas.gameObject.SetActive(false);
 
+					_levelCanvas.gameObject.SetActive(true);
                     _optionList.SetActive(true);
 
-                    LoadLevel(FirstUncompletedLevel());
+                    LoadLevel(_stashedLevelIdx);
                 }
             }
         }
@@ -224,6 +227,7 @@ public class Game : MonoBehaviour
 		if (_firstPlay)
 		{
             _firstPlay = false;
+            _stashedLevelIdx = index;
             return;
         }
 
