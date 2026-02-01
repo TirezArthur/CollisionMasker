@@ -42,6 +42,10 @@ public class Turret : MonoBehaviour
     {
         if (_disablingLayers.Contains(collision.collider.gameObject.layer))
         {
+            foreach (MeshRenderer meshRenderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                meshRenderer.material.SetColor("_OverlayColor", Color.gray4);
+            }
             Destroy(this);
             Debug.Log($"{name} was disabled by {collision.collider.name}");
         }
