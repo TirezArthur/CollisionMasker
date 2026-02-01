@@ -31,7 +31,11 @@ public class Game : MonoBehaviour
     [SerializeReference] Button _creditsButton;
     [SerializeReference] Button _quitButton;
 
-	[Header("Level UI")]
+	[Header("Loading UI")]
+    [SerializeReference] Canvas _deathCanvas;
+    [SerializeReference] Canvas _winCanvas;
+
+    [Header("Level UI")]
 	[SerializeReference] Canvas _levelCanvas;
 	[SerializeReference] Button _backButton;
     [SerializeReference] Button _clearButton;
@@ -46,7 +50,11 @@ public class Game : MonoBehaviour
 	private PlayerMovement _player;
 	private int _currentLevel = 0;
 
-	public event UnityAction<int> OnLevelComplete = delegate { };
+	private bool _timerActive = false;
+	private float _timer = 0f;
+	private int _maxTimer = 1;
+
+    public event UnityAction<int> OnLevelComplete = delegate { };
 
 	private State GameState
 	{
@@ -105,18 +113,58 @@ public class Game : MonoBehaviour
 			// check for player death or win
 			if (_player.Died)
 			{
-				LoadLevel(_currentLevel);
-			}
+                // Show death UI and reload level after delay
+                _deathCanvas.gameObject.SetActive(true);
+
+                _timerActive = true;
+            }
 			else if (_player.ReachedEnd)
 			{
-				_levels[_currentLevel].Completed = true;
-                OnLevelComplete.Invoke(_currentLevel);
-                LoadLevel(_currentLevel + 1);
-			}
-		}
-	}
+                // Show win UI and load next level after delay
+                _winCanvas.gameObject.SetActive(true);
 
-	private int FirstUncompletedLevel()
+                _timerActive = true;
+            }
+		}
+
+		if (_timerActive)
+        {
+            _timer += Time.deltaTime;
+
+            if (_timer >= _maxTimer)
+            {
+                _timerActive = false;
+                _timer = 0f;
+
+                if (_player.Died)
+                {
+                    ReloadLevel();
+                }
+                else if (_player.ReachedEnd)
+                {
+                    LoadNextLevel();
+                }
+            }
+        }
+    }
+
+	private void ReloadLevel()
+    {
+		_deathCanvas.gameObject.SetActive(false);
+
+        LoadLevel(_currentLevel);
+    }
+
+	private void LoadNextLevel()
+	{
+        _winCanvas.gameObject.SetActive(false);
+
+        _levels[_currentLevel].Completed = true;
+        OnLevelComplete.Invoke(_currentLevel);
+        LoadLevel(_currentLevel + 1);
+    }
+
+    private int FirstUncompletedLevel()
 	{
 		foreach (LevelData level in _levels) 
 		{

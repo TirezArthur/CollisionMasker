@@ -88,7 +88,10 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("End"))
         {
             Debug.Log($"{name} collided with {collision.gameObject.name}");
-            _reachedEnd = true;
+            if (!_died)
+            {
+                _reachedEnd = true;
+            }
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Projectile"))
         {
