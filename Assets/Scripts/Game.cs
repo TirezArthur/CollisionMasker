@@ -23,6 +23,7 @@ public class Game : MonoBehaviour
 	[SerializeReference] CollisionUIBehaviour _collisionUI;
 	[SerializeReference] Button _menuButton;
 	[SerializeReference] Button _restartButton;
+	[SerializeReference] GameObject _optionList;
 
     [Header("Menu UI")]
     [SerializeReference] Canvas _menuCanvas;
@@ -34,6 +35,7 @@ public class Game : MonoBehaviour
 	[Header("Loading UI")]
     [SerializeReference] Canvas _deathCanvas;
     [SerializeReference] Canvas _winCanvas;
+	[SerializeReference] Canvas _tooltipCanvas;
 
     [Header("Level UI")]
 	[SerializeReference] Canvas _levelCanvas;
@@ -53,6 +55,12 @@ public class Game : MonoBehaviour
 	private bool _timerActive = false;
 	private float _timer = 0f;
 	private int _maxTimer = 1;
+
+	private bool _firstPlay = true;
+	private bool _toolTipShown = false;
+	private bool _toolTipGone = false;
+	private float _toolTipTimer = 0f;
+	private int _toolTipDuration = 3;
 
     public event UnityAction<int> OnLevelComplete = delegate { };
 
@@ -125,6 +133,13 @@ public class Game : MonoBehaviour
 
                 _timerActive = true;
             }
+			else
+			{
+                _deathCanvas.gameObject.SetActive(false);
+                _winCanvas.gameObject.SetActive(false);
+                _timerActive = false;
+                _timer = 0f;
+            }
 		}
 
 		if (_timerActive)
@@ -143,6 +158,37 @@ public class Game : MonoBehaviour
                 else if (_player.ReachedEnd)
                 {
                     LoadNextLevel();
+                }
+            }
+        }
+
+        // FANTASTIC tooltip logic
+        // Great reference to give other people, my dear Codepilot
+        if (!_firstPlay)
+		{
+			if (!_toolTipShown)
+			{
+				_tooltipCanvas.gameObject.SetActive(true);
+                _gameCanvas.gameObject.SetActive(true);
+
+                _optionList.SetActive(false);
+
+                _toolTipShown = true;
+			}
+			else
+			{
+				_toolTipTimer += Time.deltaTime;
+
+                if (_toolTipTimer >= _toolTipDuration && !_toolTipGone)
+				{
+					_toolTipTimer = 0f;
+					_toolTipGone = true;
+
+                    _tooltipCanvas.gameObject.SetActive(false);
+
+                    _optionList.SetActive(true);
+
+                    LoadLevel(FirstUncompletedLevel());
                 }
             }
         }
@@ -166,7 +212,7 @@ public class Game : MonoBehaviour
 
     private int FirstUncompletedLevel()
 	{
-		foreach (LevelData level in _levels) 
+		foreach (LevelData level in _levels)
 		{
 			if (!level.Completed) return _levels.IndexOf(level);
 		}
@@ -175,7 +221,13 @@ public class Game : MonoBehaviour
 
 	public void LoadLevel(int index)
 	{
-		Debug.Log("Loading level " + index);
+		if (_firstPlay)
+		{
+            _firstPlay = false;
+            return;
+        }
+
+        Debug.Log("Loading level " + index);
 
 		UnloadLevel();
 
