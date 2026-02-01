@@ -82,7 +82,7 @@ public class Game : MonoBehaviour
             _menuCamera.enabled = value != State.Playing;
             RenderSettings.fog = value != State.Playing;
             
-            if (value == State.Main) GetComponent<TitleAnimation>().Reset();
+            if (value == State.Main) GetComponent<TitleAnimation>().ResetPos();
             
 			_state = value;
 		}

@@ -12,7 +12,7 @@ namespace DefaultNamespace
 		private Vector2 _wStartPos;
 		private Vector2 _allhackPos;
 		
-		private void Start()
+		private void Awake()
 		{
 			// store original transforms
 			_wStartPos = _wText.transform.GetComponent<RectTransform>().anchoredPosition;
@@ -24,7 +24,7 @@ namespace DefaultNamespace
 			StartCoroutine(AnimationCoroutine());
 		}
 
-		public void Reset()
+		public void ResetPos()
 		{
 			StopAllCoroutines();
 			_wText.text = "W";
