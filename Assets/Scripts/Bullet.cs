@@ -6,9 +6,22 @@ public class Bullet : MonoBehaviour
     [SerializeField] private GameObject _bulletImpactEffectPrefab;
     [SerializeField] private GameObject _miscImpactEffectPrefab;
 
+    private float _lifeTimer = 0f;
+    [SerializeField] private int _lifetime = 5;
+
     private void Start()
     {
         GetComponent<Rigidbody>().linearVelocity = transform.forward * _speed;
+    }
+
+    private void Update()
+    {
+        _lifeTimer += Time.deltaTime;
+
+        if (_lifeTimer >= _lifetime)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
