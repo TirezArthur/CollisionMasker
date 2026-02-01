@@ -83,8 +83,16 @@ public class Game : MonoBehaviour
             _menuCamera.enabled = value != State.Playing;
             RenderSettings.fog = value != State.Playing;
             _grid.SetActive(value != State.Playing);
-            
-            if (value == State.Main) GetComponent<TitleAnimation>().ResetPos();
+
+			if (value == State.Main)
+			{
+				_firstPlay = true;
+				_toolTipShown = false;
+				_toolTipGone = false;
+				_toolTipTimer = 0f;
+
+                GetComponent<TitleAnimation>().ResetPos();
+			}
             
 			_state = value;
 		}
