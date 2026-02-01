@@ -3,7 +3,8 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private float _speed = 30f;
-    [SerializeField] private GameObject _impactEffectPrefab;
+    [SerializeField] private GameObject _bulletImpactEffectPrefab;
+    [SerializeField] private GameObject _miscImpactEffectPrefab;
 
     private void Start()
     {
@@ -15,7 +16,14 @@ public class Bullet : MonoBehaviour
         // If bullet hits bullet, create impact effect
         if (collision.gameObject.layer == gameObject.layer)
         {
-            GameObject effect = Instantiate(_impactEffectPrefab);
+            GameObject effect = Instantiate(_bulletImpactEffectPrefab);
+            effect.transform.position = gameObject.transform.position;
+            Destroy(effect, 2f);
+        }
+        else
+        {
+            // Otherwise, create misc impact effect
+            GameObject effect = Instantiate(_miscImpactEffectPrefab);
             effect.transform.position = gameObject.transform.position;
             Destroy(effect, 2f);
         }

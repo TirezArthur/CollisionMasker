@@ -321,6 +321,8 @@ MonoBehaviour:
   _inputAsset: {fileID: -944628639613478452, guid: 24a93b36afc9ca34b88ae87d6b3e16b0, type: 3}
   _movementSpeed: 60
   _rotationSpeed: 8
+  _deathSound: {fileID: 8300000, guid: 9b1fa05fbe991db4e8d0f5872f6982cc, type: 3}
+  _winSound: {fileID: 8300000, guid: 90bdbc9a90943f743aa722846a85b108, type: 3}
 --- !u!82 &3214138447965838677
 AudioSource:
   m_ObjectHideFlags: 0

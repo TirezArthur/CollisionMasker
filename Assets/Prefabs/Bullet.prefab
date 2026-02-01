@@ -159,7 +159,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   _speed: 10
-  _impactEffectPrefab: {fileID: 9134391716207655478, guid: 3096f34648a70cb4d8a6e6dd86614d95, type: 3}
+  _bulletImpactEffectPrefab: {fileID: 9134391716207655478, guid: 3096f34648a70cb4d8a6e6dd86614d95, type: 3}
+  _miscImpactEffectPrefab: {fileID: 9134391716207655478, guid: 9f064146d7439b14abc64aa8ec1170e5, type: 3}
 --- !u!54 &6488994183569115053
 Rigidbody:
   m_ObjectHideFlags: 0
