@@ -23,6 +23,8 @@ public class CollisionToggleButton : MonoBehaviour
     [SerializeField] private float m_FlickerCooldown = .3f;
     [SerializeField] private int m_MaxFlickers = 5;
 
+    [SerializeField] private AudioClip m_ClickSound;
+
     private int m_FlickerCount = 0;
     bool m_IsFlickering = false;
 
@@ -78,6 +80,12 @@ public class CollisionToggleButton : MonoBehaviour
             m_VisualObjects2.Clear();
             m_IsFlickering = false;
             return;
+        }
+
+        AudioSource audio = transform.parent.GetComponent<AudioSource>();
+        if (!audio.isPlaying)
+        {
+            audio.PlayOneShot(m_ClickSound);
         }
 
         m_VisualObjects1 = FindObjectsByLayer(layerNumber);

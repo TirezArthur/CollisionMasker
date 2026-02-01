@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class CollisionUIBehaviour : MonoBehaviour
@@ -23,6 +25,12 @@ public class CollisionUIBehaviour : MonoBehaviour
 
     [SerializeField] private GameObject m_TogglePrefab;
     [SerializeField] private GameObject m_IconPrefab;
+
+    [SerializeField] private TMP_Text m_ToolTipText;
+
+    private bool m_IsToolTipActive = false;
+    private float m_ToolTipTimer = 0f;
+    private int m_ToolTipDuration = 3;
 
     [SerializeField] private List<LayerIcon> m_LayerIcons = new();
 
@@ -69,10 +77,58 @@ public class CollisionUIBehaviour : MonoBehaviour
         }
 
         Key.KeyPickedUp += pair => UnlockByPair(pair.layer1, pair.layer2, true);
+        Key.KeyPickedUp += pair => EnableToolTip(pair.layer1, pair.layer2);
 
         InitialiseCanvas();
 
         InitialiseCollisionGrid();
+    }
+
+    private void EnableToolTip(LayerMask layer1, LayerMask layer2)
+    {
+        m_ToolTipText.gameObject.SetActive(true);
+        m_IsToolTipActive = true;
+
+        // Get index of layer from LayerMask
+        int layerNumber = 0;
+        int layer1val = layer1.value;
+        while (layer1val > 0)
+        {
+            layer1val = layer1val >> 1;
+            layerNumber++;
+        }
+        layerNumber -= 1;
+
+        // Get index of layer from LayerMask2
+        int layerNumber2 = 0;
+        int layer2val = layer2.value;
+        while (layer2val > 0)
+        {
+            layer2val = layer2val >> 1;
+            layerNumber2++;
+        }
+        layerNumber2 -= 1;
+
+        m_ToolTipText.text = string.Format(
+            "You can now edit the collisions between {0} and {1}.",
+            LayerMask.LayerToName(layerNumber),
+            LayerMask.LayerToName(layerNumber2)
+        );
+    }
+
+    private void Update()
+    {
+        if (m_IsToolTipActive)
+        {
+            m_ToolTipTimer += Time.deltaTime;
+
+            if (m_ToolTipTimer >= m_ToolTipDuration)
+            {
+                m_ToolTipText.gameObject.SetActive(false);
+                m_IsToolTipActive = false;
+                m_ToolTipTimer = 0f;
+            }
+        }
     }
 
     private void InitialiseCanvas()

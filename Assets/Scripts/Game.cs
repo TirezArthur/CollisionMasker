@@ -34,6 +34,7 @@ public class Game : MonoBehaviour
     [SerializeReference] Button _levelsButton;
     [SerializeReference] Button _creditsButton;
     [SerializeReference] Button _quitButton;
+    [SerializeReference] GameObject _grid;
 
 	[Header("Loading UI")]
     [SerializeReference] Canvas _deathCanvas;
@@ -81,8 +82,9 @@ public class Game : MonoBehaviour
             
             _menuCamera.enabled = value != State.Playing;
             RenderSettings.fog = value != State.Playing;
+            _grid.SetActive(value != State.Playing);
             
-            if (value == State.Main) GetComponent<TitleAnimation>().Reset();
+            if (value == State.Main) GetComponent<TitleAnimation>().ResetPos();
             
 			_state = value;
 		}

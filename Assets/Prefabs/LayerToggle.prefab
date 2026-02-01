@@ -123,6 +123,7 @@ MonoBehaviour:
   m_FlickerTimer: 0
   m_FlickerCooldown: 0.2
   m_MaxFlickers: 5
+  m_ClickSound: {fileID: 8300000, guid: 776da0b7a680803439785fd892e1fad5, type: 3}
 --- !u!1 &8123940287663638800
 GameObject:
   m_ObjectHideFlags: 0
