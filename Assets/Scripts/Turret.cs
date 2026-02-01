@@ -3,18 +3,22 @@ using UnityEditor;
 using UnityEngine;
 using UnityUtils;
 
+[RequireComponent(typeof(AudioSource))]
 public class Turret : MonoBehaviour
 {
     [SerializeField] private LayerMask _disablingLayers;
     [SerializeField] private GameObject? _bulletPrefab;
     [SerializeField] private AudioClip? _shootSound;
+    [SerializeField] private AudioSource _audioSource = null!;
     [SerializeField] private float _interval = 2f;
     [SerializeReference] private Transform? _bulletOrigin = null;
     private float _cooldown;
+    static private float _lastAudioTimestamp = 0;
 
     private void Start()
     {
         _cooldown = _interval;
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -26,7 +30,11 @@ public class Turret : MonoBehaviour
             if (!_bulletPrefab) return;
             _cooldown += _interval;
             GameObject bullet = GameObject.Instantiate(_bulletPrefab, _bulletOrigin?.position ?? transform.position, Quaternion.LookRotation(transform.forward.With(y: 0)));
-            AudioSource.PlayClipAtPoint(_shootSound, transform.position);
+            if (Time.time - _lastAudioTimestamp > _audioSource.clip.length)
+            {
+                _audioSource.Play();
+                _lastAudioTimestamp = Time.time;
+            }
         }
     }
 
