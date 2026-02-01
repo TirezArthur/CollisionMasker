@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DefaultNamespace;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -73,8 +74,12 @@ public class Game : MonoBehaviour
             _menuCanvas.gameObject.SetActive(value == State.Main);
 			_levelCanvas.gameObject.SetActive(value == State.Levels);
             _creditsCanvas.gameObject.SetActive(value == State.Credits);
+            
             _menuCamera.enabled = value != State.Playing;
-
+            RenderSettings.fog = value != State.Playing;
+            
+            if (value == State.Main) GetComponent<TitleAnimation>().Reset();
+            
 			_state = value;
 		}
 		get => _state;
@@ -228,6 +233,8 @@ public class Game : MonoBehaviour
 		{
             _firstPlay = false;
             _stashedLevelIdx = index;
+
+            GetComponent<TitleAnimation>().Run();
             return;
         }
 
