@@ -12,8 +12,11 @@ namespace DefaultNamespace
 		
 		private void Awake()
 		{
-			// store original transforms
-			_wStartPos = _wText.transform.GetComponent<RectTransform>().anchoredPosition;
+            _wText.fontMaterial.DisableKeyword("UNDERLAY_ON");
+            _allhackText.fontMaterial.DisableKeyword("UNDERLAY_ON");
+
+            // store original transform
+            _wStartPos = _wText.transform.GetComponent<RectTransform>().anchoredPosition;
 		}
 
 		public void Run()
