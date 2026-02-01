@@ -1,4 +1,4 @@
-Shader "URP/FullyLitWireframe_Transparent"
+Shader "URP/FullyLitWireframe_Transparent_Fog_Fixed"
 {
     Properties
     {
@@ -13,7 +13,6 @@ Shader "URP/FullyLitWireframe_Transparent"
 
     SubShader
     {
-        // 1. Change Queue to Transparent
         Tags { 
             "RenderType" = "Transparent" 
             "RenderPipeline" = "UniversalPipeline" 
@@ -25,7 +24,6 @@ Shader "URP/FullyLitWireframe_Transparent"
             Name "ForwardLit"
             Tags { "LightMode" = "UniversalForward" }
 
-            // 2. Enable Alpha Blending and disable Z-Write (standard for transparent)
             Blend SrcAlpha OneMinusSrcAlpha
             ZWrite On
 
@@ -33,6 +31,8 @@ Shader "URP/FullyLitWireframe_Transparent"
             #pragma vertex vert
             #pragma fragment frag
             
+            // Fog keywords
+            #pragma multi_compile_fog
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
@@ -55,6 +55,7 @@ Shader "URP/FullyLitWireframe_Transparent"
                 float3 positionWS : TEXCOORD1;
                 float2 uv : TEXCOORD0;
                 float3 normalWS : TEXCOORD2;
+                float fogFactor : TEXCOORD3; 
             };
 
             sampler2D _MainTex;
@@ -74,6 +75,10 @@ Shader "URP/FullyLitWireframe_Transparent"
                 output.positionWS = vertexInput.positionWS;
                 output.uv = TRANSFORM_TEX(input.uv, _MainTex);
                 output.normalWS = TransformObjectToWorldNormal(input.normalOS);
+                
+                // Correct way to compute fog factor for URP
+                output.fogFactor = ComputeFogFactor(output.positionCS.z);
+                
                 return output;
             }
 
@@ -87,7 +92,7 @@ Shader "URP/FullyLitWireframe_Transparent"
                 float2 edge = smoothstep(fw, 0, abs(frac(uv - 0.5) - 0.5));
                 float mask = max(edge.x, edge.y);
 
-                // Lighting Setup
+                // Lighting
                 float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
                 Light mainLight = GetMainLight(shadowCoord);
                 float3 lightAcc = mainLight.color * (saturate(dot(normalWS, mainLight.direction)) * mainLight.shadowAttenuation);
@@ -99,18 +104,25 @@ Shader "URP/FullyLitWireframe_Transparent"
                     lightAcc += light.color * (saturate(dot(normalWS, light.direction)) * light.distanceAttenuation);
                 }
 
-                // Combine Color
+                // Color
                 float4 texSample = tex2D(_MainTex, input.uv);
-                float3 baseAlbedo = lerp(texSample.rgb, _WireColor.rgb, mask);
-                                baseAlbedo *= _OverlayColor;
-
+                float3 baseAlbedo = lerp(texSample.rgb, _WireColor.rgb, mask) * _OverlayColor.rgb;
                 float3 ambient = SampleSH(normalWS) * _AmbientStrength;
+                
                 float3 finalColor = baseAlbedo * (lightAcc + ambient);
                 finalColor += _WireColor.rgb * mask * _WireEmission;
 
-                // 3. Calculate Alpha
-                // We use the wireframe mask to ensure the wires are always more opaque than the mesh faces
+                // Final Alpha
                 float finalAlpha = lerp(_BaseAlpha * texSample.a, 1.0, mask);
+
+                // --- SMART FOG APPLICATION ---
+                // MixFog handles the color blending. If fog is off, it returns finalColor as is.
+                finalColor = MixFog(finalColor, input.fogFactor);
+                
+                // We only fade alpha if fog is actually enabled in the scene
+                #if defined(FOG_LINEAR) || defined(FOG_EXP) || defined(FOG_EXP2)
+                    finalAlpha *= input.fogFactor;
+                #endif
 
                 return half4(finalColor, finalAlpha);
             }
