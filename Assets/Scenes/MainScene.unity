@@ -3682,6 +3682,7 @@ MonoBehaviour:
   _levelsButton: {fileID: 1479209702}
   _creditsButton: {fileID: 278126048}
   _quitButton: {fileID: 101244878}
+  _grid: {fileID: 1688785876}
   _deathCanvas: {fileID: 17127897}
   _winCanvas: {fileID: 640193843}
   _tooltipCanvas: {fileID: 815509718}
@@ -5084,7 +5085,7 @@ GameObject:
   - component: {fileID: 1688785878}
   - component: {fileID: 1688785877}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: GridPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
