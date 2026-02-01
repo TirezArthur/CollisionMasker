@@ -200,13 +200,13 @@ public class Game : MonoBehaviour
                 {
 					if (_isIronMan)
 					{
-						LoadLevel(0);
-
 						// reset all levels to uncompleted
 						foreach (LevelData level in _levels)
 						{
 							level.Completed = false;
 						}
+
+						LoadLevel(FirstUncompletedLevel());
                     }
                     else
 					{
