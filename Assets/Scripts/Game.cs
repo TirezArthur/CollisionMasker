@@ -148,6 +148,12 @@ public class Game : MonoBehaviour
 			levelButton.GetComponent<LevelButton>()._level = levelIndex;
             levelButton.GetComponent<LevelButton>()._game = this;
         }
+
+        // Clear level completions for PlayTest
+        foreach (LevelData level in _levels)
+        {
+            level.Completed = false;
+        }
     }
 
     private void ToggleIronMan(bool isEnabled)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -32,6 +31,8 @@ namespace DefaultNamespace
 		IEnumerator AnimationCoroutine()
 		{
 			_wText.text = "<s>W</s>";
+			
+			GetComponent<AudioSource>().Play();
 			
 			_wText.fontMaterial.EnableKeyword("UNDERLAY_ON");
 			_allhackText.fontMaterial.EnableKeyword("UNDERLAY_ON");
