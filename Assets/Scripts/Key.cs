@@ -15,6 +15,11 @@ public class Key : MonoBehaviour
     }
     [SerializeField] private List<Pair> _pairs = new();
 
+    public void Update()
+    {
+        transform.Rotate(0f, Time.deltaTime * 40f, 0f);
+    }
+
     public void Pickup()
     {
         foreach (Pair pair in _pairs) KeyPickedUp.Invoke(pair);

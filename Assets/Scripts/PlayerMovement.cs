@@ -73,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             Debug.Log($"{name} collided with {other.gameObject.name}");
+            GetComponent<AudioSource>().Play();
             _died = true;
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("Key"))

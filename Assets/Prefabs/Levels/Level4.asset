@@ -17,4 +17,10 @@ MonoBehaviour:
   _lockedLayers:
     serializedVersion: 2
     m_Bits: 0
-  _toggleConstraints: []
+  _toggleConstraints:
+  - layer1:
+      serializedVersion: 2
+      m_Bits: 8192
+    layer2:
+      serializedVersion: 2
+      m_Bits: 16384
