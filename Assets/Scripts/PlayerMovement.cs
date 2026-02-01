@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _movementSpeed = 10f;
     [SerializeField] private float _rotationSpeed = 8f;
 
+    [SerializeField] private AudioClip _deathSound;
+    [SerializeField] private AudioClip _winSound;
+
     private bool _died;
     private bool _reachedEnd;
     public bool Died => _died;
@@ -40,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     public void Reset()
     {
         _died = false;
-    }   
+    }
 
     private void FixedUpdate()
     {
@@ -92,12 +95,16 @@ public class PlayerMovement : MonoBehaviour
             if (!_died)
             {
                 _reachedEnd = true;
+
+                GetComponent<AudioSource>().PlayOneShot(_winSound);
             }
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Projectile"))
         {
             Debug.Log($"{name} collided with {collision.gameObject.name}");
             _died = true;
+
+            GetComponent<AudioSource>().PlayOneShot(_deathSound);
         }
     }
 }
