@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DefaultNamespace;
 using TMPro;
@@ -28,6 +29,7 @@ public class Game : MonoBehaviour
 
     [Header("Menu UI")]
     [SerializeReference] Canvas _menuCanvas;
+	[SerializeReference] Toggle _ironManToggle;
     [SerializeReference] Button _playButton;
     [SerializeReference] Button _levelsButton;
     [SerializeReference] Button _creditsButton;
@@ -57,7 +59,9 @@ public class Game : MonoBehaviour
 	private float _timer = 0f;
 	private int _maxTimer = 1;
 
-	private bool _firstPlay = true;
+    private bool _isIronMan = false;
+
+    private bool _firstPlay = true;
 	private bool _toolTipShown = false;
 	private bool _toolTipGone = false;
 	private float _toolTipTimer = 0f;
@@ -85,6 +89,21 @@ public class Game : MonoBehaviour
 		get => _state;
 	}
 
+	private void Play()
+	{
+		if (_isIronMan)
+		{
+            // Clear all level completions
+            foreach (LevelData level in _levels)
+            {
+                level.Completed = false;
+            }
+        }
+
+        // Start at first uncompleted level
+        LoadLevel(FirstUncompletedLevel());
+    }
+
 	void Start()
 	{
 		GameState = State.Main;
@@ -96,8 +115,9 @@ public class Game : MonoBehaviour
 		});
 		_restartButton.onClick.AddListener(() => LoadLevel(_currentLevel));
 
-		_playButton.onClick.AddListener(() => LoadLevel(FirstUncompletedLevel()));
-		_levelsButton.onClick.AddListener(() => GameState = State.Levels);
+		_playButton.onClick.AddListener(() => Play());
+		_ironManToggle.onValueChanged.AddListener(ToggleIronMan);
+        _levelsButton.onClick.AddListener(() => GameState = State.Levels);
 		_creditsButton.onClick.AddListener(() => GameState = State.Credits);
         _quitButton.onClick.AddListener(() => Application.Quit());
 
@@ -120,7 +140,26 @@ public class Game : MonoBehaviour
         }
     }
 
-	void Update()
+    private void ToggleIronMan(bool isEnabled)
+    {
+        _isIronMan = isEnabled;
+
+		_levelsButton.interactable = !isEnabled;
+		_restartButton.interactable = !isEnabled;
+
+        if (isEnabled)
+        {
+            _levelsButton.GetComponent<Image>().color = Color.gray;
+			_restartButton.GetComponent<Image>().color = Color.gray;
+        }
+        else
+        {
+            _levelsButton.GetComponent<Image>().color = Color.white;
+            _restartButton.GetComponent<Image>().color = Color.white;
+        }
+    }
+
+    void Update()
 	{
 		if (GameState == State.Playing)
 		{
@@ -159,7 +198,20 @@ public class Game : MonoBehaviour
 
                 if (_player.Died)
                 {
-                    ReloadLevel();
+					if (_isIronMan)
+					{
+						LoadLevel(0);
+
+						// reset all levels to uncompleted
+						foreach (LevelData level in _levels)
+						{
+							level.Completed = false;
+						}
+                    }
+                    else
+					{
+                        ReloadLevel();
+                    }
                 }
                 else if (_player.ReachedEnd)
                 {
@@ -211,7 +263,7 @@ public class Game : MonoBehaviour
 
 	private void LoadNextLevel()
 	{
-        _winCanvas.gameObject.SetActive(false);
+		_winCanvas.gameObject.SetActive(false);
 
         _levels[_currentLevel].Completed = true;
         OnLevelComplete.Invoke(_currentLevel);
@@ -236,6 +288,11 @@ public class Game : MonoBehaviour
 
             GetComponent<TitleAnimation>().Run();
             return;
+        }
+
+		if (_isIronMan)
+		{
+			index = FirstUncompletedLevel();
         }
 
         Debug.Log("Loading level " + index);
